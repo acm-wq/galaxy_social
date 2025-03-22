@@ -1,0 +1,62 @@
+# Rails (Server) settings
+/server/.bundle
+/server/db/*.sqlite3
+/server/db/*.sqlite3-journal
+/server/log/*
+/server/tmp/*
+/server/public/assets
+/server/public/packs
+/server/public/packs-test
+/server/node_modules
+
+# Next.js (Client) settings
+/client/.next
+/client/node_modules
+/client/out
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# RubyMine (if you use it)
+/.idea/
+
+# Rails specific
+*.rbc
+capybara-*.html
+.rvmrc
+.idea/
+.project
+*.log
+*.pid
+*.seed
+
+# Byebug
+.byebug_history
+
+# Rails credentials and secrets
+/server/config/credentials.yml.enc
+/server/config/master.key
+
+# .env files
+/.env
+/.env.development
+/.env.test
+/.env.production
+
+# Yarn (for front-end dependencies)
+yarn-debug.log*
+yarn-error.log*
+
+# NPM (for front-end dependencies)
+npm-debug.log*
+package-lock.json
+
+# VS Code settings
+.vscode/

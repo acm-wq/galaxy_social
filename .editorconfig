@@ -1,0 +1,62 @@
+root = true
+
+# Rails (Ruby) settings
+[*.{rb,ruby}]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+tab_width = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Ruby on Rails specific style guide
+[config/**]
+indent_style = space
+indent_size = 2
+
+# Next.js (JavaScript/TypeScript) settings
+[*.{js,jsx,ts,tsx}]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+tab_width = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# YAML files (Rails config files)
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Tailwind CSS files (if using `.css` or `.scss`)
+[*.{css,scss}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Files in the `client/` (Next.js) directory
+[client/**/*.{js,jsx,ts,tsx,css,scss}]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+tab_width = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
