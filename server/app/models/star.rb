@@ -2,7 +2,8 @@
 class Star
   include UniqueCodeGenerator
 
-  attr_accessor :id, :name, :planet_ids
+  attr_accessor :name, :planet_ids
+  attr_reader :key
 
   def initialize(attributes = {})
     @key = attributes["id"] || self.class.generate_unique_code
@@ -12,7 +13,8 @@ class Star
   end
 
   def save
-    $redis.set("star:#{self.key}", self.to_json)
+    $redis.set("star:#{@key}", self.to_json)
+    @key
   end
 
   def self.find_by_code(key)
