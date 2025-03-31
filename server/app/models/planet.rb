@@ -1,27 +1,34 @@
 class Planet
-  attr_accessor :id, :name, :star_id
+  attr_accessor :name
 
   def initialize(attributes = {})
-    @id = self.class.next_id
     @name = attributes["name"]
   end
 
   def save
-    $redis.set("planet:#{@id}", self.to_json)
-    @id
+    validate!
+    $redis.set("planet:#{@name}", self.to_json)
+    @name
   end
 
   def self.find_by_name(name)
-    planet = $redis.get("planet:#{name}")
-    return nil if planet.nil?
-    JSON.parse(planet)
-  end
+    planet_name = $redis.get("planet_name:#{name.downcase}")
+    return nil if planet_name.nil?
 
-  def self.next_id
-    $redis.incr("planet:id")
+    planet_data = $redis.get("planet:#{planet_name}")
+    return nil if planet_data.nil?
+
+    JSON.parse(planet_data)
   end
 
   def to_json(*_args)
-    { id: @id, name: @name }.to_json
+    { name: @name }.to_json
+  end
+
+  private
+
+  def validate!
+    raise "Name can't be blank" if @name.nil? || @name.strip.empty?
+    raise "Name must be unique" if $redis.exists?("planet:#{@name}")
   end
 end

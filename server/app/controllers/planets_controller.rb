@@ -16,7 +16,7 @@ class PlanetsController < ApplicationController
     planet = Planet.new(planet_params.to_h)
 
     if planet.save
-      render json: { id: planet.id, message: "Planet created successfully" }, status: :created
+      render json: { name: planet.name, message: "Planet created successfully" }, status: :created
     else
       render json: { error: "Failed to create planet" }, status: :unprocessable_entity
     end
