@@ -9,8 +9,9 @@ module UniqueCodeGenerator
     def generate_unique_code(prefix: nil, length: 8)
       counter = $redis.incr(REDIS_UNIQUE_CODE_KEY)
 
-      prefix ||= self.name.upcase
-      unique_code = "#{prefix}#{counter.to_s.rjust(length, '0')}"
+      random_component = SecureRandom.hex(4)
+
+      unique_code = "STAR#{counter.to_s.rjust(length, '0')}#{random_component}"
       unique_code
     end
   end
