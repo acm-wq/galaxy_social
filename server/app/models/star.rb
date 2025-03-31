@@ -9,7 +9,7 @@ class Star
     @key = attributes["id"] || self.class.generate_unique_code
     @name = attributes["name"]
     @password = attributes["password"]
-    # @planet_ids = attributes["planet_ids"] || []
+    @planet_ids = attributes["planet_ids"] || []
   end
 
   def save
@@ -28,9 +28,9 @@ class Star
     save
   end
 
-  # def planets
-    # Planet.find_all_by_star_id(@id)
-  # end
+  def planet_ids
+    @planet_ids
+  end
 
   def to_json(*_args)
     { name: @name, password: @password }.to_json

@@ -1,8 +1,7 @@
 class StarsController < ApplicationController
   # GET /stars/:id
   def show
-    star_id = params[:id]
-    star_data = $redis.get("star:#{star_id}")
+    star_data = $redis.get("star:#{params[:id]}")
 
     if star_data.nil?
       render json: { error: "Star not found" }, status: :not_found
