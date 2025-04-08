@@ -1,9 +1,15 @@
+import api from "@/lib/api";
+
 async function getStar(id) {
-  const res = await fetch(`http://localhost:3000/stars/${id}`);
-  if (!res.ok) {
-    throw new Error("Star not found");
+  try {
+    const res = await api.get(`/stars/${id}`);
+    return res.data;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      throw new Error("Star not found");
+    }
+    throw new Error("Failed to fetch star");
   }
-  return res.json();
 }
 
 export default async function StarPage({ params }) {

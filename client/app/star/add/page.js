@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import api from "@/lib/api"; // Импортируем настроенный экземпляр Axios
 
 export default function AddStar() {
   const [name, setName] = useState("");
@@ -16,27 +17,13 @@ export default function AddStar() {
     setSuccess(null);
 
     try {
-      const res = await fetch("http://localhost:3000/stars", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, password }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to create star");
-      }
-
-      const data = await res.json();
-      setSuccess(`Star created successfully with KEY: ${data.id}`);
+      const res = await api.post("/stars", { name, password }); // Используем api.post вместо fetch
+      setSuccess(`Star created successfully with ID: ${res.data.id}`);
       setName("");
       setPassword("");
-
-      router.push(`/star/${data.id}`);
+      router.push(`/star/${res.data.id}`);
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.error || "Failed to create star");
     }
   };
 
