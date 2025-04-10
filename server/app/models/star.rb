@@ -13,7 +13,12 @@ class Star
   end
 
   def save
-    $redis.set("star:#{@key}", self.to_json)
+    @key ||= SecureRandom.uuid
+    redis_key = "star:#{@key}"
+
+    $redis.set(redis_key, to_json)
+    StarCollection.add_star(redis_key)
+
     @key
   end
 
