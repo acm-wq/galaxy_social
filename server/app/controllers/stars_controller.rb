@@ -1,4 +1,16 @@
 class StarsController < ApplicationController
+  # GET /stars/random
+  def random
+    random_key = StarCollection.get_random_star_key
+
+    if random_key.nil?
+      render json: { error: "No stars available" }, status: :not_found
+    else
+      star_data = Star.find_by_code(random_key)
+      render json: JSON.parse(star_data), status: :ok
+    end
+  end
+
   # GET /stars/:id
   def show
     star_data = $redis.get("star:#{params[:id]}")
