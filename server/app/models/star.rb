@@ -14,6 +14,8 @@ class Star
 
   def save
     $redis.set("star:#{@key}", self.to_json)
+    StarCollection.add_star(@key)
+
     @key
   end
 
@@ -33,6 +35,6 @@ class Star
   end
 
   def to_json(*_args)
-    { name: @name, password: @password }.to_json
+    { key: @key, name: @name, password: @password }.to_json
   end
 end
