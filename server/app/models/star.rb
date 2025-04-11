@@ -35,6 +35,6 @@ class Star
   end
 
   def to_json(*_args)
-    { name: @name, password: @password }.to_json
+    { key: @key, name: @name, password: @password }.to_json
   end
 end

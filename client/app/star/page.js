@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import api from "@/lib/api";
 
 export default function Star() {
@@ -11,11 +12,29 @@ export default function Star() {
   const fetchRandomStar = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const res = await api.get("/stars/random");
-      setStar(res.data);
+      const viewedStarNames = JSON.parse(Cookies.get("viewed_stars") || "[]");
+
+      const res = await api.get("/stars/random", {
+        params: { list_stars: viewedStarNames },
+      });
+
+      if (res.data?.name) {
+        setStar(res.data);
+
+        const updatedViewedStars = [...viewedStarNames, res.data.name];
+        Cookies.set("viewed_stars", JSON.stringify(updatedViewedStars), { expires: 1 });
+      } else {
+        console.error("Invalid star data:", res.data);
+        setError("Incorrect star data.");
+      }
     } catch (err) {
-      setError("No star found");
+      if (err.response?.status === 404) {
+        setError("No star found. Please try again.");
+      } else {
+        setError("Error fetching star. Please try again.");
+      }
       setStar(null);
       console.error("Error fetching star:", err);
     } finally {
