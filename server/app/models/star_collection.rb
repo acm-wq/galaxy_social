@@ -1,3 +1,21 @@
+# The StarCollection class provides methods to manage a collection of stars stored.
+# It allows adding stars, retrieving a random star key while excluding specific names,
+# and checking if any stars exist in the collection.
+#
+# Constants:
+# - LIST_STAR: A frozen string key used to store the list of star keys in Redis.
+#
+# Class Methods:
+# - .add_star(key): Adds a star key to the Redis list. Does nothing if the key is nil.
+#   @param key [String] The key of the star to add.
+#
+# - .get_random_star_key(excluded_names): Retrieves a random star key from the Redis list,
+#   excluding stars with names in the provided exclusion list. Returns nil if no valid star is found.
+#   @param excluded_names [Array<String>] A list of star names to exclude.
+#   @return [String, nil] The key of a random star or nil if no valid star is found.
+#
+# - .any_stars?: Checks if there are any stars in the Redis list.
+#   @return [Boolean] True if the list exists, false otherwise.
 class StarCollection
   LIST_STAR = "star_keys".freeze
 
