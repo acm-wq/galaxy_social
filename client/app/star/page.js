@@ -48,12 +48,12 @@ export default function Star() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-10 px-4">
-      <h1 className="text-4xl font-bold mb-6">🌟</h1>
 
       {loading ? (
         <p className="text-lg">Loading...</p>
       ) : star ? (
         <div className="shadow-xl rounded-2xl p-6 w-full max-w-md text-center">
+          <img src={star.avatar} alt={star.name} className="w-86 h-86 rounded-full" />
           <h2 className="text-2xl font-semibold mb-2">{star.name}</h2>
         </div>
       ) : (
