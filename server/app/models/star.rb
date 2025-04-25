@@ -4,24 +4,23 @@ class Star
 
   # This is a real small classification of stars in our universe.
   # The classification is based on the temperature and color of the star.
-  # O stars are blue.
-  # A stars are white.
-  # G stars are yellow.
-  # K stars are orange.
-  # M stars are red.
-  STAR_TYPES = %w[O A G K M].freeze
+  STAR_TYPES = {
+    O: "blue",
+    A: "white",
+    G: "yellow",
+    K: "orange",
+    M: "red"
+  }.freeze
 
   attr_accessor :name, :planet_ids
   attr_reader :key
-
-  after_save :set_path_for_star
 
   def initialize(attributes = {})
     @key = attributes["id"] || self.class.generate_unique_code
     @name = attributes["name"]
     @password = attributes["password"]
-    @type_star = attributes["type_star"] || "G"
-    @avatar = attributes["avatar"]
+    @type_star = (attributes["type_star"] || :G).to_sym
+    @avatar = set_path_for_star
     @planet_ids = attributes["planet_ids"] || []
   end
 
@@ -34,7 +33,8 @@ class Star
 
   def self.find_by_code(key)
     star = $redis.get("star:#{key}")
-    return nil if star.empty?
+    return nil if star.nil? || star.empty?
+
     star
   end
 
@@ -57,7 +57,7 @@ class Star
       name: @name,
       password: @password,
       type_star: @type_star,
-      avatar: set_path_for_star(@type_star)
+      avatar: @avatar
     }.to_json
   end
 
@@ -65,8 +65,7 @@ class Star
     STAR_TYPES.include?(@type_star)
   end
 
-  def set_path_for_star(type_star)
-    path = File.join(StarCollection::STARS_PATH, "#{@key}.json")
-    File.write(path, to_json)
+  def set_path_for_star
+    @avatar = "/star/#{STAR_TYPES[@type_star]}_star.gif"
   end
 end

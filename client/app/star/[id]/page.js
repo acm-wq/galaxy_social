@@ -20,8 +20,9 @@ export default async function StarPage({ params }) {
 
     return (
       <div className="flex flex-col items-center justify-center min-h-screen py-2">
+        <img src="/star/blue_star.gif" alt={star.name} className="w-86 h-86 rounded-full" />
         <h1 className="text-4xl font-bold">Star: {star.name}</h1>
-        <p className="mt-4 text-lg">Key: {id}</p>
+        <p className="mt-4 text-lg">Class star: {star.type_star}</p>
       </div>
     );
   } catch (error) {

@@ -17,6 +17,7 @@ class StarsController < ApplicationController
   def show
     star_data = $redis.get("star:#{params[:id]}")
 
+    puts star_data
     if star_data.nil?
       render json: { error: "Star not found" }, status: :not_found
     else
@@ -26,7 +27,7 @@ class StarsController < ApplicationController
 
   # POST /stars
   def create
-    star_params = params.require(:star).permit(:name, :password)
+    star_params = params.require(:star).permit(:name, :password, :type_star)
     star = Star.new(star_params.to_h)
 
     if star.save

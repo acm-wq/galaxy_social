@@ -7,6 +7,7 @@ import api from "@/lib/api";
 export default function AddStar() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [type_star, setTypeStar] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const router = useRouter();
@@ -17,15 +18,16 @@ export default function AddStar() {
     setSuccess(null);
 
     try {
-      const res = await api.post("/stars", { name, password });
+      const res = await api.post("/stars", { name, password, type_star });
       setSuccess(`Star created successfully with ID: ${res.data.id}`);
       setName("");
       setPassword("");
+      setTypeStar("");
       router.push(`/star/${res.data.id}`);
     } catch (err) {
       setError(err.response?.data?.error || "Failed to create star");
     }
-  };
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -56,6 +58,27 @@ export default function AddStar() {
             className="w-full px-4 py-2 border rounded"
             required
           />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="type_star" className="block text-lg font-medium">
+            Type Star
+          </label>
+          <select
+            id="type_star"
+            value={type_star}
+            onChange={(e) => setTypeStar(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
+            required
+          >
+            <option value="" disabled>
+              Select a type
+            </option>
+            <option value="O">Class O star</option>
+            <option value="A">Class A star</option>
+            <option value="G">Class G star</option>
+            <option value="K">Class K star</option>
+            <option value="M">Class M star</option>
+          </select>
         </div>
         <button
           type="submit"
