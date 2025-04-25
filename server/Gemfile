@@ -36,4 +36,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # RSpec for test
+  gem 'rspec-rails', '~> 7.1', '>= 7.1.1'
+  gem 'mock_redis', '~> 0.49.0'
 end
