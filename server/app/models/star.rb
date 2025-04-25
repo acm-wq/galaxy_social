@@ -1,4 +1,33 @@
+# frozen_string_literal: true
+
 #
+# The Star class represents a star entity with attributes.
+# It includes functionality for generating unique codes, saving to a Redis database, and managing associated planets.
+#
+# Constants:
+# - STAR_TYPES: A hash mapping star classifications (O, A, G, K, M) to their corresponding colors.
+#
+# Attributes:
+# - name [String]: The name of the star.
+# - password [String]: A password associated with the star (for future auth or security features).
+# - type_star [Symbol]: The spectral classification of the star (e.g., :O, :G).
+# - avatar [String]: The file path for the star's avatar image, based on its classification.
+# - planet_ids [Array<String>]: An array of associated planet IDs.
+# - key [String]: A unique identifier for the star (read-only).
+#
+# Instance Methods:
+# - initialize(attributes = {}): Initializes a new Star object with the given attributes.
+# - save: Saves the star object to Redis and adds it to the StarCollection.
+# - add_planet(planet): Adds a planet to the star's associated planets and saves the star.
+# - planet_ids: Returns the list of associated planet IDs.
+#
+# Class Methods:
+# - self.find_by_code(key): Finds a star by its unique key in Redis.
+#
+# Private Methods:
+# - to_json(*_args): Converts the star object to a JSON representation if the type is valid.
+# - valid_type_star?: Checks if the star's type is valid based on STAR_TYPES.
+# - set_path_for_star: Sets the file path for the star's avatar based on its type.
 class Star
   include UniqueCodeGenerator
 
