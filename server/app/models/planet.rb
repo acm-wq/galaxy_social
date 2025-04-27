@@ -25,8 +25,17 @@
 class Planet
   attr_accessor :name
 
+  PLANET_TYPES = {
+    terrestrial: "rocky",
+    gas_giant: "gaseous",
+    ice_giant: "icy",
+    dwarf: "small"
+  }.freeze
+
   def initialize(attributes = {})
     @name = attributes["name"]
+    @type_planet = (attributes["type_planet"] || "rocky").to_sym
+    @avatar = set_path_for_planet
   end
 
   def save
@@ -45,14 +54,20 @@ class Planet
     JSON.parse(planet_data)
   end
 
-  def to_json(*_args)
-    { name: @name }.to_json
-  end
-
   private
+
+  def to_json(*_args)
+    {
+      name: @name
+    }.to_json
+  end
 
   def validate!
     raise "Name can't be blank" if @name.nil? || @name.strip.empty?
     raise "Name must be unique" if $redis.exists?("planet:#{@name}")
+  end
+
+  def set_path_for_planet
+    @avatar = "/planet/#{PLANET_TYPES[@type_planet]}_planet.gif"
   end
 end
