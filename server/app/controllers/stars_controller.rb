@@ -61,8 +61,7 @@ class StarsController < ApplicationController
 
   # POST /stars
   def create
-    star_params = params.require(:star).permit(:name, :password, :type_star)
-    star = Star.new(star_params.to_h)
+    star = Star.new(params.require(:star).permit(:name, :password, :type_star))
 
     if star.save
       render json: { id: star.key, message: "Star created successfully" }, status: :created

@@ -26,10 +26,10 @@ class Planet
   attr_accessor :name
 
   PLANET_TYPES = {
-    terrestrial: "rocky",
+    terrestrial: "terra",
     gas_giant: "gaseous",
     ice_giant: "icy",
-    dwarf: "small"
+    lava: "lava"
   }.freeze
 
   def initialize(attributes = {})

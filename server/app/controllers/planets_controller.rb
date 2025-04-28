@@ -12,8 +12,7 @@ class PlanetsController < ApplicationController
 
   # POST /planets
   def create
-    planet_params = params.require(:planet).permit(:name)
-    planet = Planet.new(planet_params.to_h)
+    planet = Planet.new(params.require(:planet).permit(:name, :type_planet))
 
     if planet.save
       render json: { name: planet.name, message: "Planet created successfully" }, status: :created
