@@ -68,6 +68,8 @@ class Planet
   end
 
   def set_path_for_planet
+    return nil unless PLANET_TYPES.key?(@type_planet)
+
     @avatar = "/planet/#{PLANET_TYPES[@type_planet]}_planet.gif"
   end
 end

@@ -54,10 +54,10 @@ export default function AddPlanet() {
             <option value="" disabled>
               Select a type
             </option>
-            <option value="O">terrestrial</option>
-            <option value="A">gas_giant</option>
-            <option value="G">ice_giant</option>
-            <option value="K">lava</option>
+            <option value="terrestrial">terrestrial</option>
+            <option value="gas_giant">gas_giant</option>
+            <option value="ice_giant">ice_giant</option>
+            <option value="lava">lava</option>
           </select>
         </div>
         {error && <p className="text-red-500">{error}</p>}
