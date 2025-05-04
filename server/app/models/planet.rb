@@ -35,12 +35,22 @@ class Planet
   def initialize(attributes = {})
     @name = attributes["name"]
     @type_planet = (attributes["type_planet"] || "rocky").to_sym
+    @star_key = attributes["star_key"]
     @avatar = set_path_for_planet
   end
 
   def save
     validate!
     $redis.set("planet:#{@name}", self.to_json)
+
+    if @star_key
+      star_data = Star.find_by_code(@star_key)
+      if star_data
+        star_obj = Star.new(JSON.parse(star_data))
+        star_obj.add_planet(self)
+      end
+    end
+
     @name
   end
 
@@ -58,7 +68,9 @@ class Planet
 
   def to_json(*_args)
     {
-      name: @name
+      name: @name,
+      type_planet: @type_planet,
+      avatar: @avatar
     }.to_json
   end
 

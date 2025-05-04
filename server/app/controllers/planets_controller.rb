@@ -12,10 +12,22 @@ class PlanetsController < ApplicationController
 
   # POST /planets
   def create
-    planet = Planet.new(params.require(:planet).permit(:name, :type_planet))
+    permitted = params.require(:planet).permit(:name, :type_planet, :star_key)
+    planet = Planet.new(permitted.except(:star_key))
 
     if planet.save
-      render json: { name: planet.name, message: "Planet created successfully" }, status: :created
+      if permitted[:star_key].present?
+        star_data = Star.find_by_code(permitted[:star_key])
+
+        if star_data
+          star = Star.new(JSON.parse(star_data))
+          star.add_planet(planet)
+        else
+          return render json: { error: "Star not found with key: #{permitted[:star_key]}" }, status: :not_found
+        end
+      end
+
+      render json: { name: planet.name, message: "Planet created and linked successfully" }, status: :created
     else
       render json: { error: "Failed to create planet" }, status: :unprocessable_entity
     end

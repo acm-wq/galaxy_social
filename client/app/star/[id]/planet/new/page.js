@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import api from "@/lib/api";
+import { useParams } from "next/navigation";
 
 export default function AddPlanet() {
+  const { id: star_key } = useParams();
   const [name, setName] = useState("");
   const [type_planet, setTypePlanet] = useState("");
   const [error, setError] = useState(null);
@@ -15,7 +17,7 @@ export default function AddPlanet() {
     setSuccess(null);
 
     try {
-      const res = await api.post("/planets", { name, type_planet });
+      const res = await api.post("/planets", { name, type_planet, star_key: star_key });
       setSuccess(`Planet created successfully`);
       setName("");
       setTypePlanet("");
