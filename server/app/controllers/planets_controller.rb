@@ -17,17 +17,14 @@ class PlanetsController < ApplicationController
 
     if planet.save
       if permitted[:star_key].present?
-        star_data = Star.find_by_code(permitted[:star_key])
-
-        if star_data
-          star = Star.new(JSON.parse(star_data))
-          star.add_planet(planet)
+        if StarCollection.update_planets_for_star(permitted[:star_key], planet.name)
+          render json: { name: planet.name, message: "Planet created and linked successfully" }, status: :created
         else
-          return render json: { error: "Star not found with key: #{permitted[:star_key]}" }, status: :not_found
+          render json: { error: "Star not found with key: #{permitted[:star_key]}" }, status: :not_found
         end
+      else
+        render json: { name: planet.name, message: "Planet created successfully, but not linked to any star" }, status: :created
       end
-
-      render json: { name: planet.name, message: "Planet created and linked successfully" }, status: :created
     else
       render json: { error: "Failed to create planet" }, status: :unprocessable_entity
     end

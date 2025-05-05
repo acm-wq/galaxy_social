@@ -34,34 +34,22 @@ class Planet
 
   def initialize(attributes = {})
     @name = attributes["name"]
-    @type_planet = (attributes["type_planet"] || "rocky").to_sym
+    @type_planet = (attributes["type_planet"] || "terra").to_sym
     @star_key = attributes["star_key"]
     @avatar = set_path_for_planet
   end
 
   def save
-    validate!
+    # validate!
     $redis.set("planet:#{@name}", self.to_json)
-
-    if @star_key
-      star_data = Star.find_by_code(@star_key)
-      if star_data
-        star_obj = Star.new(JSON.parse(star_data))
-        star_obj.add_planet(self)
-      end
-    end
 
     @name
   end
 
   def self.find_by_name(name)
-    planet_name = $redis.get("planet_name:#{name.downcase}")
-    return nil if planet_name.nil?
+    planet = $redis.get("planet:#{name}")
 
-    planet_data = $redis.get("planet:#{planet_name}")
-    return nil if planet_data.nil?
-
-    JSON.parse(planet_data)
+    planet
   end
 
   private
@@ -75,8 +63,8 @@ class Planet
   end
 
   def validate!
-    raise "Name can't be blank" if @name.nil? || @name.strip.empty?
-    raise "Name must be unique" if $redis.exists?("planet:#{@name}")
+    #raise "Name can't be blank" if @name.nil? || @name.strip.empty?
+    #raise "Name must be unique" if $redis.exists?("planet:#{@name}")
   end
 
   def set_path_for_planet
