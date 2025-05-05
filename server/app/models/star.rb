@@ -68,7 +68,7 @@ class Star
   end
 
   def add_planet(planet)
-    @planet_ids << planet.id
+    @planet_ids << planet.name
     save
   end
 
@@ -86,7 +86,8 @@ class Star
       name: @name,
       password: @password,
       type_star: @type_star,
-      avatar: @avatar
+      avatar: @avatar,
+      planet_ids: @planet_ids
     }.to_json
   end
 

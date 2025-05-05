@@ -61,13 +61,26 @@ class StarsController < ApplicationController
 
   # POST /stars
   def create
-    star_params = params.require(:star).permit(:name, :password, :type_star)
-    star = Star.new(star_params.to_h)
+    star = Star.new(params.require(:star).permit(:name, :password, :type_star))
 
     if star.save
       render json: { id: star.key, message: "Star created successfully" }, status: :created
     else
       render json: { error: "Failed to create star" }, status: :unprocessable_entity
+    end
+  end
+
+  # POST /stars/:id/planets
+  def add_planet
+    star = Star.find_by_code(params[:id])
+    return render json: { error: "Star not found" }, status: :not_found if star.nil?
+
+    planet = Planet.new(params.require(:planet).permit(:name, :type_planet))
+    if planet.save
+      star.add_planet(planet)
+      render json: { message: "Planet added to star successfully" }, status: :ok
+    else
+      render json: { error: "Failed to add planet" }, status: :unprocessable_entity
     end
   end
 end

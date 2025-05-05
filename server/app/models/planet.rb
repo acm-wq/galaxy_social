@@ -25,34 +25,51 @@
 class Planet
   attr_accessor :name
 
+  PLANET_TYPES = {
+    terrestrial: "terra",
+    gas_giant: "gaseous",
+    ice_giant: "icy",
+    lava: "lava"
+  }.freeze
+
   def initialize(attributes = {})
     @name = attributes["name"]
+    @type_planet = (attributes["type_planet"] || "terra").to_sym
+    @star_key = attributes["star_key"]
+    @avatar = set_path_for_planet
   end
 
   def save
-    validate!
+    # validate!
     $redis.set("planet:#{@name}", self.to_json)
+
     @name
   end
 
   def self.find_by_name(name)
-    planet_name = $redis.get("planet_name:#{name.downcase}")
-    return nil if planet_name.nil?
+    planet = $redis.get("planet:#{name}")
 
-    planet_data = $redis.get("planet:#{planet_name}")
-    return nil if planet_data.nil?
-
-    JSON.parse(planet_data)
-  end
-
-  def to_json(*_args)
-    { name: @name }.to_json
+    planet
   end
 
   private
 
+  def to_json(*_args)
+    {
+      name: @name,
+      type_planet: @type_planet,
+      avatar: @avatar
+    }.to_json
+  end
+
   def validate!
-    raise "Name can't be blank" if @name.nil? || @name.strip.empty?
-    raise "Name must be unique" if $redis.exists?("planet:#{@name}")
+    #raise "Name can't be blank" if @name.nil? || @name.strip.empty?
+    #raise "Name must be unique" if $redis.exists?("planet:#{@name}")
+  end
+
+  def set_path_for_planet
+    return nil unless PLANET_TYPES.key?(@type_planet)
+
+    @avatar = "/planet/#{PLANET_TYPES[@type_planet]}_planet.gif"
   end
 end

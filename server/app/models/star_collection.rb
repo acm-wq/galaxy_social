@@ -24,6 +24,22 @@ class StarCollection
     $redis.rpush(LIST_STAR, key)
   end
 
+  def self.update_planets_for_star(star_key, planet_name)
+    star_data = $redis.get("star:#{star_key}")
+    return false unless star_data
+
+    star = JSON.parse(star_data)
+
+    star["planet_ids"] ||= []
+    star["planet_ids"] << planet_name unless star["planet_ids"].include?(planet_name)
+
+    $redis.del("star:#{star_key}")
+
+    $redis.set("star:#{star_key}", star.to_json)
+
+    true
+  end
+
   def self.get_random_star_key(excluded_names)
     return nil unless $redis.exists?(LIST_STAR)
 
