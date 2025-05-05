@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import api from "@/lib/api";
 import { use } from "react";
+import api from "@/lib/api";
 
 async function getStar(id) {
   try {
@@ -17,17 +17,40 @@ async function getStar(id) {
   }
 }
 
+async function getPlanet(name) {
+  try {
+    const res = await api.get(`/planets/${name}`);
+    return res.data;
+  } catch (error) {
+    throw new Error(`Failed to fetch planet: ${name}`);
+  }
+}
+
 export default function StarPage({ params }) {
   const { id } = use(params);
   const router = useRouter();
 
   const [star, setStar] = useState(null);
+  const [planets, setPlanets] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    getStar(id)
-      .then(setStar)
-      .catch((err) => setError(err.message));
+    async function fetchData() {
+      try {
+        const starData = await getStar(id);
+        setStar(starData);
+
+        const planetPromises = starData.planet_ids.map((planetName) =>
+          getPlanet(planetName)
+        );
+        const planetData = await Promise.all(planetPromises);
+        setPlanets(planetData);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+
+    fetchData();
   }, [id]);
 
   const handleAddPlanet = () => {
@@ -56,6 +79,20 @@ export default function StarPage({ params }) {
       <img src={star.avatar} alt={star.name} className="w-86 h-86 rounded-full" />
       <h1 className="text-4xl font-bold">Star: {star.name}</h1>
       <p className="mt-4 text-lg">Class star: {star.type_star}</p>
+
+      <h2 className="text-2xl font-semibold mt-6">Planets</h2>
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        {planets.map((planet) => (
+          <div key={planet.name} className="text-center">
+            <img
+              src={planet.avatar}
+              alt={planet.name}
+              className="w-32 h-32 mx-auto"
+            />
+            <p className="mt-2">{planet.name}</p>
+          </div>
+        ))}
+      </div>
 
       <button
         onClick={handleAddPlanet}
