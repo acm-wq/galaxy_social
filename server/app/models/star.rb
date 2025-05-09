@@ -64,7 +64,8 @@ class Star
     star = $redis.get("star:#{key}")
     return nil if star.nil? || star.empty?
 
-    star
+    star = JSON.parse(star)
+    new(star)
   end
 
   def add_planet(planet)

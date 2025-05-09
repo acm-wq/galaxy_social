@@ -6,7 +6,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :planets, controller: 'planets', only: [:show, :create]
+  resources :planets, controller: 'planets', only: [ :show, :create ]
+
+  resource :session, only: [:new, :create], controller: 'sessions' do
+    get :new, path: 'login'
+    post :create, path: 'login'
+  end
 
   # Defines the root path route ("/")
   # root "posts#index"
