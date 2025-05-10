@@ -17,11 +17,11 @@ const Register = () => {
     setSuccess("");
 
     try {
-      await axios.post("/register", { name, password });
-      setSuccess("Success!");
-      setName("");
-      setPassword("");
-      router.push("/login");
+      const response = await axios.post("/register", { name, password });
+
+      localStorage.setItem("token", response.data.token);
+
+      router.push(`/welcome?key=${response.data.key}`);
     } catch (err) {
       setError(err.response?.data?.error || "Error.");
     }
