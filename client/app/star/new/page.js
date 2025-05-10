@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthRedirect } from "../../../hooks/useAuthRedirect";
 import api from "@/lib/api";
 
 export default function AddStar() {
+  useAuthRedirect();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [type_star, setTypeStar] = useState("");

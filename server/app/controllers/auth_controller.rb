@@ -1,6 +1,4 @@
 class AuthController < ApplicationController
-  JWT_KEY = Rails.application.credentials.jwt_secret || ENV['JWT_SECRET']
-
   # POST /register
   def register
     name = params[:name]
