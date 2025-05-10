@@ -17,15 +17,10 @@ const Register = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post("/register", {
-        name,
-        password,
-      });
-
+      await axios.post("/register", { name, password });
       setSuccess("Success!");
       setName("");
       setPassword("");
-
       router.push("/login");
     } catch (err) {
       setError(err.response?.data?.error || "Error.");
@@ -33,30 +28,37 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h1>register</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
+    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+      <h1 className="text-4xl font-bold">Register</h1>
+      <form onSubmit={handleSubmit} className="mt-4 w-full max-w-md">
+        <div className="mb-4">
+          <label className="block text-lg font-medium">Name</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
             required
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="mb-4">
+          <label className="block text-lg font-medium">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded"
             required
           />
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
-        <button type="submit">Send</button>
+        <button
+          type="submit"
+          className="w-full px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Register
+        </button>
+        {error && <p className="mt-4 text-red-500">{error}</p>}
+        {success && <p className="mt-4 text-green-500">{success}</p>}
       </form>
     </div>
   );
