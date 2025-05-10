@@ -10,7 +10,7 @@ class User
   def initialize(attributes = {})
     @key = attributes["id"] || self.class.generate_unique_code(prefix: "USER")
     @name = attributes["name"]
-    @password = attributes["password"]
+    @password = Password.create(attributes["password"])
   end
 
   def save
@@ -19,7 +19,7 @@ class User
     @key
   end
 
-  def self.authentificate(key, password)
+  def self.authenticate(key, password)
     user = $redis.get("user:#{key}")
     return nil if user.nil? || user.empty?
 
@@ -33,7 +33,6 @@ class User
     user = $redis.get("user:#{key}")
     return nil if user.nil? || user.empty?
     user = JSON.parse(user)
-    return nil unless user["key"] == key
 
     new(user)
   end
