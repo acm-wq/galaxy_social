@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :planets, controller: 'planets', only: [:show, :create]
+  resources :planets, controller: 'planets', only: [ :show, :create ]
+
+  # Authentication routes
+  post '/register', to: 'auth#register'
+  post '/login', to: 'auth#login'
 
   # Defines the root path route ("/")
   # root "posts#index"

@@ -47,7 +47,7 @@ class Star
   def initialize(attributes = {})
     @key = attributes["id"] || self.class.generate_unique_code
     @name = attributes["name"]
-    @password = attributes["password"]
+    # @password = attributes["password"]
     @type_star = (attributes["type_star"] || :G).to_sym
     @avatar = set_path_for_star
     @planet_ids = attributes["planet_ids"] || []
@@ -64,7 +64,8 @@ class Star
     star = $redis.get("star:#{key}")
     return nil if star.nil? || star.empty?
 
-    star
+    star = JSON.parse(star)
+    new(star)
   end
 
   def add_planet(planet)

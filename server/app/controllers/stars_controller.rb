@@ -33,6 +33,8 @@
 #             - 201 Created: If the star is successfully created.
 #             - 422 Unprocessable Entity: If the star creation fails.
 class StarsController < ApplicationController
+  before_action :authorize_request, only: [:create]
+
   # GET /stars/random
   def random
     excluded_names = params[:list_stars] || []
