@@ -8,10 +8,9 @@ Rails.application.routes.draw do
 
   resources :planets, controller: 'planets', only: [ :show, :create ]
 
-  resource :session, only: [:new, :create], controller: 'sessions' do
-    get :new, path: 'login'
-    post :create, path: 'login'
-  end
+  # Authentication routes
+  post '/register', to: 'auth#register'
+  post '/login', to: 'auth#login'
 
   # Defines the root path route ("/")
   # root "posts#index"
